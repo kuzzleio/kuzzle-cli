@@ -35,7 +35,7 @@ async function commandDump (options) {
       controller: 'admin',
       action: 'dump',
       suffix: 'cli'
-  };
+    };
 
   return sdk.query(request)
     .then(response => {

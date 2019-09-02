@@ -1,53 +1,106 @@
-# Managing Kuzzle
+# Kuzzle CLI
 
-```
-$ kuzzle install
-```
+Kuzzle CLI is a CLI written in nodejs to be able to manage Kuzzle.
 
-Installs plugins declared in Kuzzle `.kuzzlerc` configuration file.  
+## Install dependencies
 
-```
-$ kuzzle start
-```
+Simply run
 
-Starts a Kuzzle instance in the foreground.
-
-# Create the first administrative user account
-
-This is a recommended first step to secure your Kuzzle Backend
-
-```
-$ kuzzle createFirstAdmin
+```sh
+npm install
 ```
 
-This command will guide you through the creation process of the first admin user and fix the rights to other user types if needed.
+## Available commands
 
-**Note:** This command is interactive and let you choose whether you want to apply the default secured roles and profiles or not
+### createFirstAdmin
 
-# Reset Kuzzle
+Create the first administrator user.
 
-```
-$ kuzzle reset
-```
+### clearCache
 
-will allow you to reset Kuzzle and restore it as if it is freshly installed.
+Clear internal caches in Redis.
 
+### reset
 
-## Reset and add fixtures or mappings
+Reset all users, profiles, roles and documents validation specifications
 
-You can perform a reset followed by a fixtures and/or mappings import by doing:
+Options:
 
-```
-$ kuzzle reset --fixtures /path/to/the/fixtures/file.json --mappings /path/to/the/mappings/file.json
-```
+    --noint : non interactive mode
 
-## Reset the Kuzzle server from a script or cron
+### decryptSecrets [file]
 
-```
-$ kuzzle reset --noint
-```
+Decrypt a secrets file with the provided key.
 
-# Getting help
+Options:
+
+    --vault-key <vaultKey> : Vault key used to decrypt secrets
+    --outputFile <outputFile> : Output file to write decrypted secrets
+    --noint : non interactive mode
+
+### dump
+
+Create a dump of current state of kuzzle
+
+### encryptSecrets [file]
+
+Encrypt a secrets file with the provided key.
+
+Options:
+
+    --vault-key <vaultKey> : Vault key used to encrypt secrets
+    --output-file <outputFile> : Output file to write encrypted secrets
+    --noint : non interactive mode
+
+### indexDump <index> <path>
+
+Dump an entire index in the specified directory
+
+Options:
+
+    --batch-size <batchSize> : Maximum batch size (see limits.documentsFetchCount config)
+
+### indexRestore <path>
+
+Restore the content of a previously dumped index.
+
+Options:
+
+    --batch-size <batchSize> : Maximum batch size (see limits.documentsWriteCount config)
+
+### loadMappings <file>
+
+Load database mappings into Kuzzle.
+
+### loadFixtures <file>
+
+Load database fixtures into Kuzzle.
+
+### loadSecurities <file>
+
+Load roles, profiles and users into Kuzzle.
+
+### resetSecurity
+
+Reset all users, profiles and roles.
+
+Options:
+
+    --noint : non interactive mode
+
+### resetDatabase
+
+Remove all data stored on Kuzzle.
+
+Options:    
+
+    --noint : non interactive mode
+
+### shutdown
+
+Gracefully exits after processing remaining requests.
+
+## Getting help
 
 You can, of course, get some help by using the --help option.
 

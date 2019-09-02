@@ -81,30 +81,15 @@ bindOption(
     .action(requireCommand('resetKuzzleData'))
 );
 
-// $ kuzzle resetSecurity
+// $ kuzzle decryptSecrets
 bindOption(
   program
-    .command('resetSecurity')
-    .description('reset all users, profiles and roles')
-    .option('--noint', 'non interactive mode')
-    .action(requireCommand('resetSecurity'))
-);
-
-// $ kuzzle resetDatabase
-bindOption(
-  program
-    .command('resetDatabase')
-    .description('remove all data stored on Kuzzle')
-    .option('--noint', 'non interactive mode')
-    .action(requireCommand('resetDatabase'))
-);
-
-// $ kuzzle shutdown
-bindOption(
-  program
-    .command('shutdown')
-    .description('gracefully exits after processing remaining requests')
-    .action(requireCommand('shutdown'))
+    .command('decryptSecrets [file]')
+    .option('    --vault-key <vaultKey>', 'Vault key used to decrypt secrets')
+    .option('    --outputFile <outputFile>', 'Output file to write decrypted secrets')
+    .option('    --noint', 'non interactive mode')
+    .description('decrypt a secrets file with the provided key')
+    .action(requireCommand('decryptSecrets'))
 );
 
 // $ kuzzle dump
@@ -113,6 +98,35 @@ bindOption(
     .command('dump')
     .description('create a dump of current state of kuzzle')
     .action(requireCommand('dump'))
+);
+
+// $ kuzzle encryptSecrets
+bindOption(
+  program
+    .command('encryptSecrets [file]')
+    .option('    --vault-key <vaultKey>', 'Vault key used to encrypt secrets')
+    .option('    --output-file <outputFile>', 'Output file to write encrypted secrets')
+    .option('    --noint', 'non interactive mode')
+    .description('encrypt a secrets file with the provided key')
+    .action(requireCommand('encryptSecrets'))
+);
+
+// $ kuzzle indexDump
+bindOption(
+  program
+    .command('indexDump <index> <path>')
+    .option('    --batch-size <batchSize>', 'Maximum batch size (see limits.documentsFetchCount config)')
+    .description('dump an entire index in the specified directory')
+    .action(requireCommand('indexDump'))
+);
+
+// $ kuzzle indexRestore
+bindOption(
+  program
+    .command('indexRestore <path>')
+    .option('    --batch-size <batchSize>', 'Maximum batch size (see limits.documentsWriteCount config)')
+    .description('restore the content of a previously dumped index')
+    .action(requireCommand('indexRestore'))
 );
 
 // $ kuzzle loadMappings
@@ -139,44 +153,30 @@ bindOption(
     .action(requireCommand('loadSecurities'))
 );
 
-// $ kuzzle encryptSecrets
+// $ kuzzle resetSecurity
 bindOption(
   program
-    .command('encryptSecrets [file]')
-    .option('    --vault-key <vaultKey>', 'Vault key used to encrypt secrets')
-    .option('    --outputFile <outputFile>', 'Output file to write encrypted secrets')
-    .option('    --noint', 'non interactive mode')
-    .description('encrypt a secrets file with the provided key')
-    .action(requireCommand('encryptSecrets'))
+    .command('resetSecurity')
+    .description('reset all users, profiles and roles')
+    .option('--noint', 'non interactive mode')
+    .action(requireCommand('resetSecurity'))
 );
 
-// $ kuzzle decryptSecrets
+// $ kuzzle resetDatabase
 bindOption(
   program
-    .command('decryptSecrets [file]')
-    .option('    --vault-key <vaultKey>', 'Vault key used to decrypt secrets')
-    .option('    --outputFile <outputFile>', 'Output file to write decrypted secrets')
-    .option('    --noint', 'non interactive mode')
-    .description('decrypt a secrets file with the provided key')
-    .action(requireCommand('decryptSecrets'))
+    .command('resetDatabase')
+    .description('remove all data stored on Kuzzle')
+    .option('--noint', 'non interactive mode')
+    .action(requireCommand('resetDatabase'))
 );
 
-// $ kuzzle indexDump
+// $ kuzzle shutdown
 bindOption(
   program
-    .command('indexDump <index> <path>')
-    .option('    --batch-size <batchSize>', 'Maximum batch size (see limits.documentsFetchCount config)')
-    .description('dump an entire index in the specified directory')
-    .action(requireCommand('indexDump'))
-);
-
-// $ kuzzle indexRestore
-bindOption(
-  program
-    .command('indexRestore <path>')
-    .option('    --batch-size <batchSize>', 'Maximum batch size (see limits.documentsWriteCount config)')
-    .description('restore the content of a previously dumped index')
-    .action(requireCommand('indexRestore'))
+    .command('shutdown')
+    .description('gracefully exits after processing remaining requests')
+    .action(requireCommand('shutdown'))
 );
 
 // Run user command

@@ -32,7 +32,7 @@ function handleError(cout, dumpFile, error) {
     const
       errorFile = `${dumpFile.split('.').slice(0, -1).join('.')}-errors.jsonl`,
       writeStream = fs.createWriteStream(errorFile, { flags: 'a' }),
-      serialize = ndjson.serialize().pipe(writeStream)
+      serialize = ndjson.serialize().pipe(writeStream);
 
     serialize.on('data', line => {
       writeStream.write(line);
@@ -105,7 +105,7 @@ function importCollection(sdk, cout, batchSize, dumpFile) {
               process.stdout.write(`  ${total} documents handled`);
               process.stdout.write('\r');
 
-              resolve()
+              resolve();
             });
         } else {
           resolve();
@@ -137,7 +137,7 @@ async function indexRestore (dumpDirectory, options) {
 
     process.exit(0);
   } catch (error) {
-    cout.warn(`[ℹ] Error importing ${dumpFile}: ${error.message}`);
+    cout.warn(`[ℹ] Error while importing: ${error.message}`);
 
     process.exit(1);
   }

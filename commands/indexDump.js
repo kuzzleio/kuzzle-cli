@@ -88,7 +88,7 @@ async function dumpCollection (sdk, index, collection, batchSize, directoryPath)
         await new Promise(resolve => ndjsonStream.once('drain', resolve));
       }
     }
-  } while (results = await results.next());
+  } while ((results = await results.next()));
 
   ndjsonStream.end();
   writeStream.end();

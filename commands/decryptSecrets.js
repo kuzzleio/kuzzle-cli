@@ -20,29 +20,19 @@
  */
 
 const
-  semver = require('semver'),
   fs = require('fs'),
   path = require('path'),
   readlineSync = require('readline-sync'),
-  ColorOutput = require('./colorOutput');
-
-let Vault;
-
-if (semver.satisfies(process.version, '>= 8.0.0')) {
-  Vault = require('../../lib/api/core/vault');
-} else {
-  // node6 compatible commands are one level deeper
-  Vault = require('../../../lib/api/core/vault');
-}
+  ColorOutput = require('./colorOutput'),
+  getSdk = require('./getSdk');
 
 function commandDecryptSecrets (file, options) {
   const
-    vault = new Vault(),
-    encryptedSecretsFile = file || process.env.KUZZLE_SECRETS_FILE || vault.defaultEncryptedSecretsFile,
+    secretsFile = file,
     cout = new ColorOutput(options);
 
-  if (!options.vaultKey && !process.env.KUZZLE_VAULT_KEY) {
-    cout.error('[ℹ] You must provide the vault key with --vault-key <key> or in KUZZLE_VAULT_KEY environment variable');
+  if (!options.vaultKey) {
+    cout.error('[ℹ] You must provide the vault key with --vault-key <key>');
     process.exit(1);
   }
 
@@ -51,12 +41,12 @@ function commandDecryptSecrets (file, options) {
     outputFile = options.outputFile;
 
   if (!options.outputFile) {
-    outputFile = path.resolve(`${path.dirname(encryptedSecretsFile)}/${path.basename(encryptedSecretsFile, '.enc.json')}.json`);
+    outputFile = path.resolve(`${path.dirname(secretsFile)}/${path.basename(secretsFile, '.json')}.dec.json`);
   }
 
   if (fs.existsSync(outputFile) && !options.noint) {
     cout.warn(`[ℹ] You are going to overwrite the following file: ${outputFile}`);
-    userIsSure = readlineSync.question('[❓] Are you sure? If so, please type "I am sure": ') === 'I am sure';
+    userIsSure = readlineSync.question('[❓] Are you sure? If so, please type "yes": ') === 'yes';
   } else {
     // non-interactive mode
     userIsSure = true;
@@ -69,20 +59,33 @@ function commandDecryptSecrets (file, options) {
 
   cout.notice('[ℹ] Decrypting secrets...\n');
 
-  vault.prepareCrypto(options.vaultKey);
+  let sdk;
 
-  try {
-    const encryptedSecrets = JSON.parse(fs.readFileSync(encryptedSecretsFile, 'utf-8'));
+  getSdk(options, 'ws')
+    .then(response => {
+      sdk = response;
 
-    const secrets = vault.decryptObject(encryptedSecrets);
-
-    fs.writeFileSync(outputFile, JSON.stringify(secrets, null, 2));
-
-    cout.ok(`[✔] Secrets successfully decrypted: ${path.resolve(outputFile)}`);
-  } catch (error) {
-    cout.error(`[ℹ] Can not decrypt secret file: ${error.message}`);
-    process.exit(1);
-  }
+      return null;
+    })
+    .then(() => JSON.parse(fs.readFileSync(secretsFile, 'utf-8')))
+    .then(secrets => sdk.query({
+      controller: 'admin',
+      action: 'decryptSecrets',
+      body: {
+        vaultKey: options.vaultKey,
+        secrets
+      }
+    }, options))
+    .then(res => {
+      cout.ok(`[✔] ${res.result}`);
+      fs.writeFileSync(outputFile, JSON.stringify(res.result, null, 2));
+      cout.ok(`[✔] Secrets successfully decrypted: ${outputFile}`);
+      process.exit(0);
+    })
+    .catch(error => {
+      cout.error(`[ℹ] Can not decrypt secret file: ${error.message}`);
+      process.exit(1);
+    });
 }
 
 module.exports = commandDecryptSecrets;

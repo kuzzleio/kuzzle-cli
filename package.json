@@ -13,6 +13,7 @@
     "cli-color": "^1.4.0",
     "commander": "^3.0.0",
     "kuzzle-sdk": "^6.2.1",
+    "ndjson": "^1.5.0",
     "rc": "^1.2.8",
     "readline-sync": "^1.4.10",
     "semver": "^6.3.0"
