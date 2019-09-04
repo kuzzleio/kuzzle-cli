@@ -16,6 +16,7 @@
     "ndjson": "^1.5.0",
     "rc": "^1.2.8",
     "readline-sync": "^1.4.10",
-    "semver": "^6.3.0"
+    "semver": "^6.3.0",
+    "kuzzle-vault": "kuzzleio/kuzzle-vault#KZL-1331-standalone-vault"
   }
 }

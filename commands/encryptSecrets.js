@@ -24,7 +24,7 @@ const
   path = require('path'),
   readlineSync = require('readline-sync'),
   ColorOutput = require('./colorOutput'),
-  getSdk = require('./getSdk');
+  vault = require('kuzzle-vault');
 
 function commandEncryptSecrets (file, options) {
   const
@@ -59,26 +59,10 @@ function commandEncryptSecrets (file, options) {
 
   cout.notice('[ℹ] Encrypting secrets...\n');
 
-  let sdk;
-
-  getSdk(options, 'ws')
-    .then(response => {
-      sdk = response;
-
-      return null;
-    })
-    .then(() => JSON.parse(fs.readFileSync(secretsFile, 'utf-8')))
-    .then(secrets => sdk.query({
-      controller: 'admin',
-      action: 'encryptSecrets',
-      body: {
-        vaultKey: options.vaultKey,
-        secrets
-      }
-    }, options))
-    .then(res => {
-      cout.ok(`[✔] ${res.result}`);
-      fs.writeFileSync(outputFile, JSON.stringify(res.result, null, 2));
+  JSON.parse(fs.readFileSync(secretsFile, 'utf-8'))
+    .then(secrets => {
+      const encryptedSecrets = vault.encrypt(secrets);
+      fs.writeFileSync(outputFile, JSON.stringify(encryptedSecrets, null, 2));
       cout.ok(`[✔] Secrets successfully encrypted: ${outputFile}`);
       process.exit(0);
     })
