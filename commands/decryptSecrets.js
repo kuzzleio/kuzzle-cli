@@ -24,7 +24,7 @@ const
   path = require('path'),
   readlineSync = require('readline-sync'),
   ColorOutput = require('./colorOutput'),
-  getSdk = require('./getSdk');
+  Vault = require('../../kuzzle-vault');
 
 function commandDecryptSecrets (file, options) {
   const
@@ -59,33 +59,17 @@ function commandDecryptSecrets (file, options) {
 
   cout.notice('[ℹ] Decrypting secrets...\n');
 
-  let sdk;
+  try {
+    const vault = new Vault(secretsFile, options.vaultKey, secretsFile);
 
-  getSdk(options, 'ws')
-    .then(response => {
-      sdk = response;
-
-      return null;
-    })
-    .then(() => JSON.parse(fs.readFileSync(secretsFile, 'utf-8')))
-    .then(secrets => sdk.query({
-      controller: 'admin',
-      action: 'decryptSecrets',
-      body: {
-        vaultKey: options.vaultKey,
-        secrets
-      }
-    }, options))
-    .then(res => {
-      cout.ok(`[✔] ${res.result}`);
-      fs.writeFileSync(outputFile, JSON.stringify(res.result, null, 2));
-      cout.ok(`[✔] Secrets successfully decrypted: ${outputFile}`);
-      process.exit(0);
-    })
-    .catch(error => {
-      cout.error(`[ℹ] Can not decrypt secret file: ${error.message}`);
-      process.exit(1);
-    });
+    vault.decrypt();
+    fs.writeFileSync(outputFile, JSON.stringify(vault.secrets, null, 2));
+    cout.ok(`[✔] Secrets successfully decrypted: ${outputFile}`);
+    process.exit(0);
+  } catch (error) {
+    cout.error(`[ℹ] Can not decrypt secret file: ${error.message}`);
+    process.exit(1);
+  }
 }
 
 module.exports = commandDecryptSecrets;

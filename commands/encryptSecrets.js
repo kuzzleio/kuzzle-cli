@@ -24,7 +24,7 @@ const
   path = require('path'),
   readlineSync = require('readline-sync'),
   ColorOutput = require('./colorOutput'),
-  vault = require('kuzzle-vault');
+  Vault = require('../../kuzzle-vault');
 
 function commandEncryptSecrets (file, options) {
   const
@@ -59,17 +59,16 @@ function commandEncryptSecrets (file, options) {
 
   cout.notice('[ℹ] Encrypting secrets...\n');
 
-  JSON.parse(fs.readFileSync(secretsFile, 'utf-8'))
-    .then(secrets => {
-      const encryptedSecrets = vault.encrypt(secrets);
-      fs.writeFileSync(outputFile, JSON.stringify(encryptedSecrets, null, 2));
-      cout.ok(`[✔] Secrets successfully encrypted: ${outputFile}`);
-      process.exit(0);
-    })
-    .catch(error => {
-      cout.error(`[ℹ] Can not encrypt secret file: ${error.message}`);
-      process.exit(1);
-    });
+  try {
+    const vault = new Vault(secretsFile, options.vaultKey, outputFile);
+
+    vault.encrypt(outputFile, true);
+    cout.ok(`[✔] Secrets successfully encrypted: ${outputFile}`);
+    process.exit(0);
+  } catch (error) {
+    cout.error(`[ℹ] Can not encrypt secret file: ${error.message}`);
+    process.exit(1);
+  }
 }
 
 module.exports = commandEncryptSecrets;
