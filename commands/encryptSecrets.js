@@ -60,7 +60,7 @@ function commandEncryptSecrets (file, options) {
   cout.notice('[ℹ] Encrypting secrets...\n');
 
   try {
-    const vault = new Vault(secretsFile, options.vaultKey, outputFile);
+    const vault = new Vault(options.vaultKey, secretsFile, outputFile);
 
     vault.encrypt(outputFile, true);
     cout.ok(`[✔] Secrets successfully encrypted: ${outputFile}`);
