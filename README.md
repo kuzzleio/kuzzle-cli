@@ -35,7 +35,7 @@ Decrypt a secrets file with the provided key.
 Options:
 
     --vault-key <vaultKey> : Vault key used to decrypt secrets
-    --outputFile <outputFile> : Output file to write decrypted secrets
+    --output-file <outputFile> : Output file to write decrypted secrets
     --noint : non interactive mode
 
 ### dump
