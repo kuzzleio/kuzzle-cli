@@ -45,7 +45,7 @@ jobs:
         provider: npm
         email: support@kuzzle.io
         api_key:
-          secure: gqLBt1Scnr8wAR0zauW3jI7M576Jr7d+d2C5gvCA+iI1Y6gBWMM04A3w1MHHcPUBNA+xbwNimyoxbrBozq7otiMEDbP5ConS+T3KRWyHYwjdSfmL5KmEoNqwjmo128qJq2uWFxEecBmBk63q9A3gbnhdw3/D+05NKL4B44PpyNDpT6fApsVyDNXQmeib6cYfjwB1rCv8Mcf2sbVE1eqcJuGTwDtxx/860405PqBSg7H8iGGJJr7cymaU8cK4RLre+u8GHRiSDoKeU1UiWIoIoLG0y8TisFllSstZu9kguA6ShPJJA28NLiNyJ7j0KxKW6muvY03AFxa4XQ0sMaxotjQxN3IRUnLdN1mnQydWqMRP2+HWK1uRXCiDoL9ZnSClS1BixSAv15tvhggqE76Rq4uGCcl7hYfagpUzQpsUIV40Wc7CHez/O4ZvvicWIOdo2jmh/6fRYWOFY2+ihzwszaZwAQT1cdTm75JMIqrATyNWEZvwvczQzC85HmJajhf1azyEY08kdIJxwmwh30AMl2Is0vlq9ujCp8XRsanbdj74CcDNf9RSgesiD83McLd/ZJZHSDIe//wNypcTcW4fQbSfGb1oDHWVLQ6L/jr+W3OJUgVBG31mMciGo2jSROOos8n4iHHqs3QbxTwh0B+t+1amvZlpelFUEoicprPCcN8=
+          secure: HZuU/hhHOtkotcqjAa16hfmTUJukCkCZoUyuMCCxYAnFxNX+lNAoSfZfTaagZAM9vVqviqQoFHend574RgeQcxSySz8G0M2Ca3F5iN3i3V5JtMKYJEfqHO6za1llogvNiGxTBpCAU4AyK5XAXmx41GKGMyFxtnIDTtVP8nAQV9lzCcVvjni3cT+RfeK6Iflw+T4bqnC5mYtqMzv9tuk0gyvik6+NBIr9ccNfdHvwu+M4c6d+gn2PlQ8c9+9i9lCSgiIx0Ankv621imINjlcsycaaA5Iv9UJUvOwvxEqKxJS1mts2n20w97n/4AL1S2GOm5yMK2cRLvqTNzEBNH4k8653klm4ztjlVBxKHsa94Fq3FbTMK/V3CVcnXOn//AM9ekGIA1FX9u3TvlshrF8iitCXcpRNGS/Ao8JW6azDH3kYqw8yyzdV+2f+ZxR5jMUKLIAwpfOcfGJ8cZ+AyZ1rm3MTdLZyDQO5hYi+IZSx7Cj5AErLtpHytXe0NjnmhRqtRmIL/Hg/JpP+SWvbEkiTpHWfDzJ51QCxchpECH40/qYUFszHqK6aA3dVLfvLGWyEGEk+hPAkZ4yhfkR6xczOfVDAw4SKw02+MTa2JJL8Sl+dY7iuYHAtbKcnCiGJ1oL+Bkv6YuFRUyztipnU28ZDy2xx/Av+8SgBfJVrzkV2PEU=
         on:
           repo: kuzzleio/kuzzle-cli
           branch: master
