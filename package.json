@@ -7,19 +7,21 @@
   "postinstall": "npm run build-cli",
   "scripts": {
     "build-cli": "node build-cli.js",
-    "test": "npm run e2e-test",
-    "e2e-test": "bash features/run.sh"
+    "test": "npm run test:lint && npm run test:e2e",
+    "test:e2e": "bash features/run.sh",
+    "test:lint": "eslint --max-warnings=0 ./kuzzle ./build-cli.js ./commands ./features"
   },
   "dependencies": {
     "bluebird": "^3.5.5",
     "cli-color": "^1.4.0",
     "commander": "^3.0.0",
+    "eslint": "^6.3.0",
     "kuzzle-sdk": "^6.2.1",
+    "kuzzle-vault": "^1.0.0",
     "ndjson": "^1.5.0",
     "rc": "^1.2.8",
     "readline-sync": "^1.4.10",
-    "semver": "^6.3.0",
-    "kuzzle-vault": "^1.0.0"
+    "semver": "^6.3.0"
   },
   "devDependencies": {
     "cucumber": "^5.1.0",

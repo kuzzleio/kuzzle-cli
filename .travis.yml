@@ -1,0 +1,61 @@
+---
+# ------------------------
+# Jobs configuration
+# ------------------------
+jobs:
+  include:
+    # ---------------------------------------
+    # Linter
+    # ---------------------------------------
+    - stage: Tests
+      name: ESLint
+      language: node_js
+      node_js: 10
+      cache: npm
+      install:
+        - npm ci --silent
+      script:
+        - npm run --silent test:lint
+
+    # ---------------------------------------
+    # Integration tests
+    # ---------------------------------------
+    - stage: Tests
+      name: "Integration tests - Node.js 10"
+      language: node_js
+      node_js: 10
+      services: docker
+      cache: npm
+      install:
+        - npm ci --silent
+        - sudo sysctl -w vm.max_map_count=262144
+        - $TRAVIS_BUILD_DIR/.ci/start_kuzzle.sh
+      script:
+        - npm run test:e2e
+
+    # ---------------------------------------
+    # Deployments
+    # ---------------------------------------
+    - stage: Deployments
+      name: NPM.js
+      language: node_js
+      node_js: 10
+      script: echo "Deploying Kuzzle CLI to NPM.js"
+      deploy:
+        provider: npm
+        email: support@kuzzle.io
+        api_key:
+          secure: gqLBt1Scnr8wAR0zauW3jI7M576Jr7d+d2C5gvCA+iI1Y6gBWMM04A3w1MHHcPUBNA+xbwNimyoxbrBozq7otiMEDbP5ConS+T3KRWyHYwjdSfmL5KmEoNqwjmo128qJq2uWFxEecBmBk63q9A3gbnhdw3/D+05NKL4B44PpyNDpT6fApsVyDNXQmeib6cYfjwB1rCv8Mcf2sbVE1eqcJuGTwDtxx/860405PqBSg7H8iGGJJr7cymaU8cK4RLre+u8GHRiSDoKeU1UiWIoIoLG0y8TisFllSstZu9kguA6ShPJJA28NLiNyJ7j0KxKW6muvY03AFxa4XQ0sMaxotjQxN3IRUnLdN1mnQydWqMRP2+HWK1uRXCiDoL9ZnSClS1BixSAv15tvhggqE76Rq4uGCcl7hYfagpUzQpsUIV40Wc7CHez/O4ZvvicWIOdo2jmh/6fRYWOFY2+ihzwszaZwAQT1cdTm75JMIqrATyNWEZvwvczQzC85HmJajhf1azyEY08kdIJxwmwh30AMl2Is0vlq9ujCp8XRsanbdj74CcDNf9RSgesiD83McLd/ZJZHSDIe//wNypcTcW4fQbSfGb1oDHWVLQ6L/jr+W3OJUgVBG31mMciGo2jSROOos8n4iHHqs3QbxTwh0B+t+1amvZlpelFUEoicprPCcN8=
+        on:
+          repo: kuzzleio/kuzzle-cli
+          branch: master
+          tags: true
+
+# ------------------------
+# Stages configuration
+# ------------------------
+stages:
+  - name: Tests
+    if: type =~ /(cron|pull_request)/ OR (type = push AND branch =~ /^master|[0-9]+-(dev|stable)$/)
+  - name: Deployments
+    if: branch = master
