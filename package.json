@@ -19,7 +19,7 @@
     "rc": "^1.2.8",
     "readline-sync": "^1.4.10",
     "semver": "^6.3.0",
-    "kuzzle-vault": "kuzzleio/kuzzle-vault#KZL-1331-standalone-vault"
+    "kuzzle-vault": "^1.0.0"
   },
   "devDependencies": {
     "cucumber": "^5.1.0",

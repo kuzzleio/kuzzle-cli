@@ -24,7 +24,7 @@ const
   path = require('path'),
   readlineSync = require('readline-sync'),
   ColorOutput = require('./colorOutput'),
-  Vault = require('../../kuzzle-vault');
+  Vault = require('kuzzle-vault');
 
 function commandDecryptSecrets (file, options) {
   const
