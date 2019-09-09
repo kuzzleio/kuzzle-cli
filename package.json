@@ -6,7 +6,9 @@
   "main": "./kuzzle",
   "postinstall": "npm run build-cli",
   "scripts": {
-    "build-cli": "node build-cli.js"
+    "build-cli": "node build-cli.js",
+    "test": "npm run e2e-test",
+    "e2e-test": "bash features/run.sh"
   },
   "dependencies": {
     "bluebird": "^3.5.5",
@@ -18,5 +20,12 @@
     "readline-sync": "^1.4.10",
     "semver": "^6.3.0",
     "kuzzle-vault": "kuzzleio/kuzzle-vault#KZL-1331-standalone-vault"
+  },
+  "devDependencies": {
+    "cucumber": "^5.1.0",
+    "minimist": "^1.2.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4",
+    "should": "^13.2.3"
   }
 }
