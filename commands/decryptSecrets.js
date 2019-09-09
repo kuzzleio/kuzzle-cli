@@ -60,7 +60,7 @@ function commandDecryptSecrets (file, options) {
   cout.notice('[ℹ] Decrypting secrets...\n');
 
   try {
-    const vault = new Vault(options.vaultKey, secretsFile, outputFile);
+    const vault = new Vault(options.vaultKey, null, secretsFile);
 
     vault.decrypt();
     fs.writeFileSync(outputFile, JSON.stringify(vault.secrets, null, 2));
