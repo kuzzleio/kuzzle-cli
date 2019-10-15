@@ -12,7 +12,7 @@ npm install
 
 ## Available commands
 
-### createFirstAdmin
+### `createFirstAdmin`
 
 Create the first administrator user.
 
