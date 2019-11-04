@@ -11,6 +11,10 @@
     "test:e2e": "bash features/run.sh",
     "test:lint": "eslint --max-warnings=0 ./kuzzle ./build-cli.js ./commands ./features"
   },
+  "bin": {
+    "kuzzle": "./kuzzle.js"
+  },
+  "preferGlobal": true,
   "dependencies": {
     "bluebird": "^3.5.5",
     "cli-color": "^1.4.0",
