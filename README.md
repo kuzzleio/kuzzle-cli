@@ -2,12 +2,20 @@
 
 Kuzzle CLI is a CLI written in nodejs to be able to manage Kuzzle.
 
-## Install dependencies
+## Compatibility matrice
+
+| Kuzzle Version | CLI Version    |
+| -------------- | -------------- |
+| 1.x.x          | 1.x.x          | 
+| 2.x.x          | 2.x.x          | 
+
+
+## Install
 
 Simply run
 
 ```sh
-npm install
+npm install -g kuzzle-cli
 ```
 
 ## Available commands

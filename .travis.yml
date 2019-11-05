@@ -21,9 +21,9 @@ jobs:
     # Integration tests
     # ---------------------------------------
     - stage: Tests
-      name: "Integration tests - Node.js 10"
+      name: "Integration tests - Kuzzle v1 - Node.js 6"
       language: node_js
-      node_js: 10
+      node_js: 6
       services: docker
       cache: npm
       install:

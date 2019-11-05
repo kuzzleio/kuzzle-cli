@@ -9,7 +9,7 @@
     "build-cli": "node build-cli.js",
     "test": "npm run test:lint && npm run test:e2e",
     "test:e2e": "bash features/run.sh",
-    "test:lint": "eslint --max-warnings=0 ./kuzzle ./build-cli.js ./commands ./features"
+    "test:lint": "eslint --max-warnings=0 ./kuzzle.js ./build-cli.js ./commands ./features"
   },
   "bin": {
     "kuzzle": "./kuzzle.js"
