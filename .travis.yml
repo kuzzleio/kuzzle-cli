@@ -27,6 +27,22 @@ jobs:
       services: docker
       cache: npm
       install:
+        - npm i --silent
+        - sudo sysctl -w vm.max_map_count=262144
+        - $TRAVIS_BUILD_DIR/.ci/start_kuzzle.sh
+      script:
+        - npm run test:e2e
+
+    # ---------------------------------------
+    # Integration tests
+    # ---------------------------------------
+    - stage: Tests
+      name: "Integration tests - Kuzzle v1 - Node.js 10"
+      language: node_js
+      node_js: 10
+      services: docker
+      cache: npm
+      install:
         - npm ci --silent
         - sudo sysctl -w vm.max_map_count=262144
         - $TRAVIS_BUILD_DIR/.ci/start_kuzzle.sh
