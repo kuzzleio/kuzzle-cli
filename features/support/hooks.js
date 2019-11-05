@@ -1,18 +1,17 @@
-const 
+const
   {
     AfterAll
   } = require('cucumber'),
   Api = require('./api'),
   minimist = require('minimist');
 
-AfterAll(async function () {
-  const params = parseWorldParameters(),
+AfterAll(function () {
+  const
+    params = parseWorldParameters(),
     api = new Api(params.host, params.port);
 
-  try {
-    await api.deleteIndex('tolkien');
-  // eslint-disable-next-line no-empty
-  } catch (error) {}
+  return api.deleteIndex('tolkien')
+      .catch(() => {});
 });
 
 function parseWorldParameters() {
