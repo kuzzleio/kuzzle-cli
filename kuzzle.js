@@ -20,19 +20,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-const semver = require('semver');
-
 function requireCommand(commandName) {
-  let requiredModule;
-
-  if (semver.satisfies(process.version, '>= 8.0.0')) {
-    requiredModule = require(`./commands/${commandName}`);
-  } else {
-    // node6 compatible commands are one level deeper
-    requiredModule = require(`./commands/node6/${commandName}`);
-  }
-
-  return requiredModule;
+  return require(`./commands/${commandName}`);
 }
 
 /**

@@ -4,39 +4,39 @@ const
     Then
   } = require('cucumber');
 
-Then(/^I'm able to delete the index named "([^"]*)"$/, function (index) {
-  return this.api.deleteIndex(index);
+Then(/^I'm able to delete the index named "([^"]*)"$/, async function (index) {
+  await this.api.deleteIndex(index);
 });
 
-Then(/^I count ([\d]*) documents(?: in index "([^"]*)"(:"([\w-]+)")?)?$/, function (number, index, collection) {
-  return this.api.count({}, index, collection)
-    .then(({ result }) => {
-      if (result.count !== parseInt(number)) {
-        throw Error(`No correct value for count. Expected ${number}, got ${res.result.count}`);
-      }
-    });
+Then(/^I count ([\d]*) documents(?: in index "([^"]*)"(:"([\w-]+)")?)?$/, async function (number, index, collection) {
+  const res = await this.api.count({}, index, collection);
+
+  if (res.result.count !== parseInt(number)) {
+    throw Error(`No correct value for count. Expected ${number}, got ${res.result.count}`);
+  }
 });
 
-When(/^I create an index named "([^"]*)"$/, function (index) {
-  return this.api.createIndex(index);
+When(/^I create an index named "([^"]*)"$/, async function (index) {
+  const body = await this.api.createIndex(index);
+
+  if (!body.result) {
+    throw new Error('No result provided');
+  }
+
+  this.result = body.result;
 });
 
-When(/I create a collection "([\w-]+)":"([\w-]+)"( with "([\d]+)" documents)?/, function (index, collection, countRaw) {
-  return this.api.createCollection(index, collection)
-    .then(() => {
-      const
-        promises = [],
-        count = parseInt(countRaw);
+When(/I create a collection "([\w-]+)":"([\w-]+)"( with "([\d]+)" documents)?/, async function (index, collection, countRaw) {
+  await this.api.createCollection(index, collection);
 
-    for (let i = 0; i < count; ++i) {
-      promises.push(
-        this.api.createDocument({ number: `doc-${i}` }, index, collection));
-    }
+  const
+    count = parseInt(countRaw);
 
-    return Promise.all(promises);
-  });
+  for (let i = 0; i < count; ++i) {
+    await this.api.createDocument({ number: `doc-${i}` }, index, collection);
+  }
 });
 
-Then(/^I refresh the index(?: "(.*?)")?$/, function (index) {
-  return this.api.refreshIndex(index);
+Then(/^I refresh the index(?: "(.*?)")?$/, async function (index) {
+  await this.api.refreshIndex(index);
 });

@@ -10,7 +10,7 @@ jobs:
     - stage: Tests
       name: ESLint
       language: node_js
-      node_js: 10
+      node_js: 12
       cache: npm
       install:
         - npm ci --silent
@@ -21,25 +21,9 @@ jobs:
     # Integration tests
     # ---------------------------------------
     - stage: Tests
-      name: "Integration tests - Kuzzle v1 - Node.js 6"
+      name: "Integration tests - Kuzzle v1 - Node.js 12"
       language: node_js
-      node_js: 6
-      services: docker
-      cache: npm
-      install:
-        - npm i --silent
-        - sudo sysctl -w vm.max_map_count=262144
-        - $TRAVIS_BUILD_DIR/.ci/start_kuzzle.sh
-      script:
-        - npm run test:e2e
-
-    # ---------------------------------------
-    # Integration tests
-    # ---------------------------------------
-    - stage: Tests
-      name: "Integration tests - Kuzzle v1 - Node.js 10"
-      language: node_js
-      node_js: 10
+      node_js: 12
       services: docker
       cache: npm
       install:
@@ -55,7 +39,7 @@ jobs:
     - stage: Deployments
       name: NPM.js
       language: node_js
-      node_js: 10
+      node_js: 12
       script: echo "Deploying Kuzzle CLI to NPM.js"
       deploy:
         provider: npm

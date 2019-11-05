@@ -5,13 +5,14 @@ const
   Api = require('./api'),
   minimist = require('minimist');
 
-AfterAll(function () {
-  const
-    params = parseWorldParameters(),
+AfterAll(async function () {
+  const params = parseWorldParameters(),
     api = new Api(params.host, params.port);
 
-  return api.deleteIndex('tolkien')
-      .catch(() => {});
+  try {
+    await api.deleteIndex('tolkien');
+  // eslint-disable-next-line no-empty
+  } catch (error) {}
 });
 
 function parseWorldParameters() {

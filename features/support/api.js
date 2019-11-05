@@ -10,13 +10,16 @@ class Api {
     return encodeURI(this._baseUri + '/' + path);
   }
 
-  callApi (options) {
+  async callApi (options) {
     options.json = true;
 
-    return rp(options)
-      .catch(error => {
-        throw error.error.error.message;
-      });
+    try {
+      const res = await rp(options);
+
+      return res;
+    } catch (error) {
+      throw error.error.error.message;
+    }
   }
 
   count (query, index, collection) {
