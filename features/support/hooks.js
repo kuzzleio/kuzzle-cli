@@ -1,7 +1,7 @@
 'use strict';
 
 const
-  { After, Before, BeforeAll } = require('cucumber'),
+  { After, Before } = require('cucumber'),
   { Kuzzle, WebSocket } = require('kuzzle-sdk'),
   World = require('./world');
 
