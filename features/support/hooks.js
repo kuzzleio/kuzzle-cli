@@ -1,29 +1,31 @@
+'use strict';
+
 const
-  {
-    AfterAll
-  } = require('cucumber'),
-  Api = require('./api'),
-  minimist = require('minimist');
+  { After, Before, BeforeAll } = require('cucumber'),
+  { Kuzzle, WebSocket } = require('kuzzle-sdk'),
+  World = require('./world');
 
-AfterAll(async function () {
-  const params = parseWorldParameters(),
-    api = new Api(params.host, params.port);
+// Common hooks ================================================================
 
-  try {
-    await api.deleteIndex('tolkien');
-  // eslint-disable-next-line no-empty
-  } catch (error) {}
+Before(({ timeout: 10 * 1000 }), async function () {
+  const world = new World({});
+
+  this.sdk = new Kuzzle(new WebSocket(world.host, { port: world.port }));
+
+  await this.sdk.connect();
+
+  await this.sdk.query({
+    controller: 'admin',
+    action: 'resetDatabase',
+    refresh: 'wait_for'
+  });
 });
 
-function parseWorldParameters() {
-  const
-    argv = minimist(process.argv.slice(2)),
-    parameters = Object.assign({
-      protocol: 'http',
-      host: 'localhost',
-      port: 7512,
-      silent: true
-    }, JSON.parse(argv['world-parameters'] || '{}'));
+After(async function () {
+  // Clean values stored by the scenario
+  this.props = {};
 
-  return parameters;
-}
+  if (this.sdk && typeof this.sdk.disconnect === 'function') {
+    this.sdk.disconnect();
+  }
+});

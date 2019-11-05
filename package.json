@@ -18,7 +18,7 @@
     "cli-color": "^1.4.0",
     "commander": "^3.0.2",
     "eslint": "^6.6.0",
-    "kuzzle-sdk": "^6.2.5",
+    "kuzzle-sdk": "7.0.0-beta.2",
     "kuzzle-vault": "^1.0.1",
     "ndjson": "^1.5.0",
     "rc": "^1.2.8",
