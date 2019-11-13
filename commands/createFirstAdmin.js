@@ -56,7 +56,7 @@ function getPassword () {
 
 async function shouldWeResetRoles () {
   return readlineSync.keyInYN(
-      cout.format.question('[❓] Restrict rights of the default and anonymous roles?'));
+    cout.format.question('[❓] Restrict rights of the default and anonymous roles?'));
 }
 
 async function confirm (username, resetRoles) {
