@@ -4,40 +4,33 @@ const
     Then
   } = require('cucumber');
 
-Then(/^I'm able to delete the index named "([^"]*)"$/, async function (index) {
-  await this.api.deleteIndex(index);
+Then('I\'m able to delete the index named {string}', async function (index) {
+  await this.sdk.index.delete(index);
 });
 
-Then(/^I count ([\d]*) documents(?: in index "([^"]*)"(:"([\w-]+)")?)?$/, async function (number, index, collection) {
-  const res = await this.api.count({}, index, collection);
-  
-  if (res.result.count !== parseInt(number)) {
-    throw Error(`No correct value for count. Expected ${number}, got ${res.result.count}`);
+Then('I count {int} documents in collection {string}:{string}', async function (number, index, collection) {
+  const count = await this.sdk.document.count(index, collection, {});
+
+  if (count !== parseInt(number)) {
+    throw Error(`No correct value for count. Expected ${number}, got ${count}`);
   }
 });
 
-When(/^I create an index named "([^"]*)"$/, async function (index) {
-  const body = await this.api.createIndex(index);
-
-  if (!body.result) {
-    throw new Error('No result provided');
-  }
-
-  this.result = body.result;
+When('I create an index named {string}', async function (index) {
+  await this.sdk.index.create(index);
 });
 
 When(/I create a collection "([\w-]+)":"([\w-]+)"( with "([\d]+)" documents)?/, async function (index, collection, countRaw) {
-  await this.api.createCollection(index, collection);
+  await this.sdk.collection.create(index, collection);
 
   const
     count = parseInt(countRaw);
 
   for (let i = 0; i < count; ++i) {
-    await this.api.createDocument({ number: `doc-${i}` }, index, collection);
+    await this.sdk.document.create(index, collection, { number: `doc-${i}` });
   }
 });
 
-Then(/^I refresh the index(?: "(.*?)")?$/, async function (index) {
-  await this.api.refreshIndex(index);
+Then('I refresh the collection {string}:{string}', async function (index, collection) {
+  await this.sdk.collection.refresh(index, collection);
 });
-

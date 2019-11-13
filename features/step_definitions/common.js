@@ -15,7 +15,7 @@ When('I have a file {string} containing {string}', function (filePath, rawConten
 });
 
 When('I use the CLI command {string}', function (cliCommand) {
-  execSync(`./kuzzle ${cliCommand}`);
+  execSync(`./kuzzle.js ${cliCommand}`);
 });
 
 /* eslint-disable no-useless-escape */

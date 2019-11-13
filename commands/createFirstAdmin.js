@@ -20,7 +20,6 @@
  */
 
 const
-  Bluebird = require('bluebird'),
   readlineSync = require('readline-sync'),
   ColorOutput = require('./colorOutput'),
   getSdk = require('./getSdk');
@@ -28,14 +27,14 @@ const
 /** @type ColorOutput */
 let cout;
 
-function getUserName () {
+async function getUserName () {
   const username = readlineSync.question(cout.format.question('\n[❓] First administrator account name\n'));
 
   if (username.length === 0) {
     return getUserName();
   }
 
-  return Bluebird.resolve(username);
+  return username;
 }
 
 function getPassword () {
@@ -52,16 +51,15 @@ function getPassword () {
     return getPassword();
   }
 
-  return Bluebird.resolve(password);
+  return password;
 }
 
-function shouldWeResetRoles () {
-  return Bluebird.resolve(
-    readlineSync.keyInYN(
-      cout.format.question('[❓] Restrict rights of the default and anonymous roles?')));
+async function shouldWeResetRoles () {
+  return readlineSync.keyInYN(
+    cout.format.question('[❓] Restrict rights of the default and anonymous roles?'));
 }
 
-function confirm (username, resetRoles) {
+async function confirm (username, resetRoles) {
   let msg = `\n[❓] About to create the administrator account "${username}"`;
 
   if (resetRoles) {
@@ -69,7 +67,7 @@ function confirm (username, resetRoles) {
   }
 
   msg += '.\nConfirm? ';
-  return Bluebird.resolve(readlineSync.keyInYN(cout.format.question(msg)));
+  return readlineSync.keyInYN(cout.format.question(msg));
 }
 
 function commandCreateFirstAdmin (options) {

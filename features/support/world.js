@@ -1,18 +1,51 @@
-const 
-  {setWorldConstructor} = require('cucumber'),
-  Api = require('./api');
+const { setWorldConstructor } = require('cucumber');
 
-class CLIWorld {
-  constructor (config) {
-    this.config = Object.assign({
-      host: 'localhost',
-      port: 7512
-    }, config.parameters);
+class KuzzleWorld {
+  constructor (attach, parameters) {
+    this.attach = attach.attach;
+    this.parameters = parameters;
 
-    this.api = new Api(this.config.host, this.config.port);
+    this.host = process.env.KUZZLE_HOST || 'localhost';
+    this.port = process.env.KUZZLE_PORT || '7512';
+
+    // Intermediate steps should store values inside this object
+    this.props = {};
+
+  }
+
+  parseObject (dataTable) {
+    const content = dataTable.rowsHash();
+
+    for (const key of Object.keys(content)) {
+      content[key] = JSON.parse(content[key]);
+    }
+
+    return content;
+  }
+
+  parseObjectArray (dataTable) {
+    const
+      objectArray = [],
+      keys = dataTable.rawTable[0];
+
+    for (let i = 1; i < dataTable.rawTable.length; i++) {
+      const
+        object = {},
+        rawObject = dataTable.rawTable[i];
+
+      for (let j = 0; j < keys.length; j++) {
+        if (rawObject[j] !== '-') {
+          object[keys[j]] = JSON.parse(rawObject[j]);
+        }
+      }
+
+      objectArray.push(object);
+    }
+
+    return objectArray;
   }
 }
 
-setWorldConstructor(CLIWorld);
+setWorldConstructor(KuzzleWorld);
 
-module.exports = CLIWorld;
+module.exports = KuzzleWorld;
