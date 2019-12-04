@@ -11,18 +11,22 @@ services:
       - redis
       - elasticsearch
     environment:
-      - kuzzle_services__db__client__host=http://elasticsearch:9200
+      - kuzzle_services__storageEngine__client__node=http://elasticsearch:9200
       - kuzzle_services__internalCache__node__host=redis
       - kuzzle_services__memoryStorage__node__host=redis
       - NODE_ENV=production
 
   redis:
     image: redis:5
+    ports:
+      - "6379:6379"
 
   elasticsearch:
     image: kuzzleio/elasticsearch:7
     ulimits:
       nofile: 65536
+    ports:
+      - "9200:9200"
     environment:
       - cluster.name=kuzzle
       - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
