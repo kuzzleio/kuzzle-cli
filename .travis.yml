@@ -10,7 +10,7 @@ jobs:
     - stage: Tests
       name: ESLint
       language: node_js
-      node_js: 10
+      node_js: 12
       cache: npm
       install:
         - npm ci --silent
@@ -23,7 +23,7 @@ jobs:
     - stage: Tests
       name: "Integration tests - Node.js 10"
       language: node_js
-      node_js: 10
+      node_js: 12
       services: docker
       cache: npm
       install:
@@ -38,17 +38,15 @@ jobs:
     # ---------------------------------------
     - stage: Deployments
       name: NPM.js
+      if: type = pull_request AND branch =~ /^master|[0-9]+-stable$/
       language: node_js
-      node_js: 10
+      node_js: 12
       script: echo "Deploying Kuzzle CLI to NPM.js"
       deploy:
         provider: npm
         email: support@kuzzle.io
         api_key:
           secure: "qemNLUbqkCpFCGOx3bNtDgTTmsHRjiiswO19/V2mpa7El1Nxo2ZduB41uAAFfJTmS+SN8goQrseQe9eY/BWDXrzfF/TLyVlTgSefo/W+rzI24ZjVa4Ub3Zj8zRFYwvss2RKjgAWuIPxFHoYsCVdkQuK5OAg+4/H0BV9+Zjz7icrKZCR9DnAeGGphPXgWw64/HPw6SVUMjbTjMH1XkJT7bcZ3IF2rxWxKg4Dr7k56aBnFIgbjvmoAiMO4X1/ouVgWlZHJ0Iq3JH92HE8E9AggGwJ8rIh+srvXtxost7jg9IEvGF8VSyZDdN0j5XAqbFg3IgSqoIiFUrfg6X2QfIHx1jr3JDJdKeePtQ8yNxGb/dtrYKHT84sfiKj3c3t+1EtLEeA9Rkw47AywnJSsbzvQj08CsLyGFqVM5LbDv/euPAQpFJlXPINKRwfL49Yu97PaPHv3UIDkOnkTFQ9+PWie2sALJKlLsAq9onV1XUm2T7oy/nt22NLxo6aii1mlEsoYY/nMZyiKcO+s+VZGZfKvvmKwYDXFsA6kLw/C9LvLQpbGS2dzvbJMzEvbXqknOnC07Uf6N080bIeHlXGfGGpEDbrAIotzOOupGd65ojt/hSUjsb+8JxcPXV8RCFRbkFTVNNqeH4L/1wBtCoGIs7Spy6BXRk09VPsmPyUtXC7xmsM="
-        on:
-          repo: kuzzleio/kuzzle-cli
-          branch: master
 
 # ------------------------
 # Stages configuration
