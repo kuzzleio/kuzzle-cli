@@ -21,7 +21,7 @@ jobs:
     # Integration tests
     # ---------------------------------------
     - stage: Tests
-      name: "Integration tests - Node.js 10"
+      name: "Integration tests - Node.js 12"
       language: node_js
       node_js: 12
       services: docker
