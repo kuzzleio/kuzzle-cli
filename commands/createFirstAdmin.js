@@ -20,7 +20,6 @@
  */
 
 const
-  Bluebird = require('bluebird'),
   readlineSync = require('readline-sync'),
   ColorOutput = require('./colorOutput'),
   getSdk = require('./getSdk');
@@ -35,30 +34,29 @@ function getUserName () {
     return getUserName();
   }
 
-  return Bluebird.resolve(username);
+  return username;
 }
 
 function getPassword () {
-  const password = readlineSync.question(cout.format.question('\n[❓] First administrator account password\n'),
-    {hideEchoBack: true}
-  );
+  const password = readlineSync.question(
+    cout.format.question('\n[❓] First administrator account password\n'),
+    {hideEchoBack: true});
 
-  const confirmation = readlineSync.question(cout.format.question('Please confirm your password\n'),
-    {hideEchoBack: true}
-  );
+  const confirmation = readlineSync.question(
+    cout.format.question('Please confirm your password\n'),
+    {hideEchoBack: true});
 
   if (password !== confirmation) {
     cout.error('[✖] Passwords do not match.');
     return getPassword();
   }
 
-  return Bluebird.resolve(password);
+  return password;
 }
 
 function shouldWeResetRoles () {
-  return Bluebird.resolve(
-    readlineSync.keyInYN(
-      cout.format.question('[❓] Restrict rights of the default and anonymous roles?')));
+  readlineSync.keyInYN(
+    cout.format.question('[❓] Restrict rights of the default and anonymous roles?'));
 }
 
 function confirm (username, resetRoles) {
@@ -69,81 +67,65 @@ function confirm (username, resetRoles) {
   }
 
   msg += '.\nConfirm? ';
-  return Bluebird.resolve(readlineSync.keyInYN(cout.format.question(msg)));
+
+  return readlineSync.keyInYN(cout.format.question(msg));
 }
 
-function commandCreateFirstAdmin (options) {
-  let
-    sdk,
-    username,
-    password,
-    resetRoles;
-
+async function commandCreateFirstAdmin (options) {
   cout = new ColorOutput(options);
 
   process.stdin.setEncoding('utf8');
 
-  return getSdk(options)
-    .then(response => {
-      sdk = response;
+  const
+    sdk = await getSdk(options),
+    adminExists = await sdk.server.adminExists();
 
-      return null;
-    })
-    .then(() => sdk.server.adminExists())
-    .then(adminExists => {
-      if (adminExists) {
-        cout.error('An administrator account already exists.');
-        process.exit(1);
+  if (adminExists) {
+    cout.error('An administrator account already exists.');
+    process.exit(1);
+  }
+
+  const
+    username = getUserName(),
+    password = getPassword(),
+    resetRoles = shouldWeResetRoles();
+
+  const response = confirm(username, resetRoles);
+
+  if (!response) {
+    cout.error('Abort.');
+    process.exit(1);
+  }
+
+  const adminUser = {
+    content: { },
+    credentials: {
+      local: {
+        username,
+        password
       }
+    }
+  };
 
-      return getUserName();
-    })
-    .then(response => {
-      username = response;
-      return getPassword();
-    })
-    .then(pwd => {
-      password = pwd;
-      return shouldWeResetRoles();
-    })
-    .then(response => {
-      resetRoles = response;
+  await sdk.security.createFirstAdmin(username, adminUser, {reset: resetRoles});
+  cout.ok(`[✔] "${username}" administrator account created`);
 
-      return confirm(username, resetRoles);
-    })
-    .then(response => {
-      if (!response) {
-        cout.error('Abort.');
-        process.exit(1);
-      }
+  if (resetRoles) {
+    cout.ok('[✔] Rights restriction applied to the following roles: ');
+    cout.ok('   - default');
+    cout.ok('   - anonymous');
+  }
 
-      const adminUser = {
-        content: { },
-        credentials: {
-          local: {
-            username,
-            password
-          }
-        }
-      };
-
-      return sdk.security.createFirstAdmin(username, adminUser, { reset: resetRoles });
-    })
-    .then(() => {
-      cout.ok(`[✔] "${username}" administrator account created`);
-
-      if (resetRoles) {
-        cout.ok('[✔] Rights restriction applied to the following roles: ');
-        cout.ok('   - default');
-        cout.ok('   - anonymous');
-      }
-
-      process.exit(0);
-    })
-    .catch(err => {
-      cout.error(err.message);
-      process.exit(1);
-    });
+  process.exit(0);
 }
 
-module.exports = commandCreateFirstAdmin;
+module.exports = async options => {
+  try {
+    await commandCreateFirstAdmin(options);
+  }
+  catch (e) {
+    cout.error(e.message);
+    process.exit(1);
+  }
+};
+
