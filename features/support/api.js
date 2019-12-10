@@ -13,13 +13,9 @@ class Api {
   async callApi (options) {
     options.json = true;
 
-    try {
-      const res = await rp(options);
+    const res = await rp(options);
 
-      return res;
-    } catch (error) {
-      throw error.error.error.message;
-    }
+    return res;
   }
 
   count (query, index, collection) {
@@ -59,9 +55,9 @@ class Api {
     });
   }
 
-  refreshIndex (index) {
+  refreshCollection (index, collection) {
     return this.callApi({
-      url: this.apiPath(index + '/_refresh'),
+      url: this.apiPath(`${index}/${collection}/_refresh`),
       method: 'POST'
     });
   }

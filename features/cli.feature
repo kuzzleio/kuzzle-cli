@@ -4,7 +4,8 @@ Feature: Cli functional tests
     And I create an index named "tolkien"
     When I create a collection "tolkien":"noldor" with "5" documents
     And I create a collection "tolkien":"angband" with "3" documents
-    And I refresh the index "tolkien"
+    And I refresh the collection "tolkien":"noldor"
+    And I refresh the collection "tolkien":"angband"
     And I use the CLI command 'indexDump tolkien ./index-dump'
     Then A file "index-dump/tolkien--noldor--data.jsonl" exists
     And A file "index-dump/tolkien--angband--data.jsonl" exists
@@ -15,7 +16,8 @@ Feature: Cli functional tests
     When I create a collection "tolkien":"noldor"
     And I create a collection "tolkien":"angband"
     And I use the CLI command 'indexRestore ./index-dump'
-    And I refresh the index "tolkien"
+    And I refresh the collection "tolkien":"noldor"
+    And I refresh the collection "tolkien":"angband"
     Then I count 5 documents in index "tolkien":"noldor"
     Then I count 3 documents in index "tolkien":"angband"
 

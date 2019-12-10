@@ -1,14 +1,28 @@
 # Kuzzle CLI
 
-Kuzzle CLI is a CLI written in nodejs to be able to manage Kuzzle.
+The Kuzzle Command Line Interface.
 
-## Install dependencies
-
-Simply run
+## Install 
 
 ```sh
-npm install
+npm install -g kuzzle-cli
 ```
+
+## How to use
+
+```
+kuzzle <options> <command> <command options>
+```
+
+Options:
+
+    -p, --port <port> : Kuzzle port number
+    -h, --host <host> : Kuzzle host name or IP address
+    -U, --username <username> : Username
+    -P, --password <password> : Password
+    -d, --debug : Print debug messages
+    -C, --noColors : Do not use ANSI coloring
+    --help : Get command help    
 
 ## Available commands
 
@@ -18,7 +32,7 @@ Create the first administrator user.
 
 ### clearCache
 
-Clear internal caches in Redis.
+Clear Kuzzle internal cache.
 
 ### reset
 
@@ -34,13 +48,13 @@ Decrypt a secrets file with the provided key.
 
 Options:
 
-    `--vault-key <vaultKey>` : Vault key used to decrypt secrets
+    --vault-key <vaultKey> : Vault key used to decrypt secrets
     --output-file <outputFile> : Output file to write decrypted secrets
     --noint : non interactive mode
 
 ### dump
 
-Create a dump of current state of kuzzle
+Create a dump of the current state of a kuzzle instance. The dumped directory can then be found in the `<KUZZLE_ROOT>/dump` directory of the dumped instance.
 
 ### encryptSecrets [file]
 
@@ -98,15 +112,4 @@ Options:
 
 ### shutdown
 
-Gracefully exits after processing remaining requests.
-
-## Getting help
-
-You can, of course, get some help by using the --help option.
-
-Try those:
-
-```
-$ kuzzle --help
-$ kuzzle reset --help
-```
+Initiate a graceful shutdown.
