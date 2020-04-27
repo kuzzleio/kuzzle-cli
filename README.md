@@ -1,6 +1,6 @@
 # Kuzzle CLI
 
-*This package has been deprecated. Please use [Kourou](https://github.com/kuzzleio/kourou), the new CLI instead.
+**This package has been deprecated. Please use [Kourou](https://github.com/kuzzleio/kourou), the new CLI instead.**
 
 The Kuzzle Command Line Interface.
 
